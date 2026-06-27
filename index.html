@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Canonical // Market Pulse</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#17090E; --panel:#1F1019; --panelTop:#24121C; --line:#3A2230; --lineSoft:#2C1824;
+    --orange:#E95420; --orangeHi:#F58A5E; --aubergine:#772953; --aubLight:#B14B86;
+    --text:#F6EFEA; --muted:#B89AA2; --faint:#7C6068; --gold:#E9A21C; --rose:#C2566B;
+    --mono:'JetBrains Mono',ui-monospace,monospace; --disp:'Space Grotesk',system-ui,sans-serif; --body:'Inter',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:var(--body);
+    padding:clamp(18px,4vw,44px);line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px;margin:0 auto}
+  a{color:var(--orangeHi)}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--orange);margin-bottom:10px}
+  .mono{font-family:var(--mono)}
+  header{border-bottom:1px solid var(--line);padding-bottom:22px;margin-bottom:28px}
+  .status{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--orange);box-shadow:0 0 10px var(--orange)}
+  .status span{font-family:var(--mono);font-size:12px;letter-spacing:.2em;color:var(--muted)}
+  h1{font-family:var(--disp);font-weight:700;font-size:clamp(32px,6vw,56px);line-height:1.02;letter-spacing:-.02em}
+  h1 .s{color:var(--orange)}
+  .lede{font-size:15px;color:var(--muted);max-width:640px;margin-top:14px}
+  .src{font-family:var(--mono);font-size:11px;color:var(--faint);margin-top:14px}
+  .toc{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+  .toc a{font-family:var(--mono);font-size:11px;text-decoration:none;color:var(--muted);border:1px solid var(--line);
+    border-radius:3px;padding:5px 10px;transition:all .2s}
+  .toc a:hover{border-color:var(--orange);color:var(--text)}
+  section{margin-bottom:34px;scroll-margin-top:20px}
+  .sechead{display:flex;align-items:baseline;gap:12px;margin-bottom:18px}
+  .secnum{font-family:var(--mono);font-size:13px;color:var(--aubLight);border:1px solid var(--line);border-radius:3px;padding:3px 8px}
+  .sectitle{font-family:var(--disp);font-weight:500;font-size:22px}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:860px){.grid3,.grid2{grid-template-columns:1fr}}
+  .panel{background:linear-gradient(var(--panelTop),var(--panel));border:1px solid var(--line);
+    border-radius:4px;padding:22px}
+  .panel .pk{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px}
+  .panel .ptitle{font-family:var(--disp);font-weight:500;font-size:19px}
+  .badge{font-family:var(--mono);font-size:13px;color:var(--aubLight);border:1px solid var(--line);border-radius:3px;padding:3px 8px}
+  .stat .num{font-family:var(--disp);font-weight:600;font-size:40px;line-height:1}
+  .stat .unit{font-family:var(--mono);font-size:16px;color:var(--muted)}
+  .stat .delta{font-family:var(--mono);font-size:12px;margin-left:4px}
+  .up{color:var(--gold)} .down{color:var(--rose)}
+  .stat .lab{font-size:13px;margin-top:8px} .stat .sub{font-size:12px;color:var(--faint);margin-top:3px}
+  .note{font-size:12.5px;color:var(--muted);margin-top:14px;padding-top:14px;border-top:1px solid var(--lineSoft)}
+  .note b{color:var(--text)}
+  .chartbox{margin-top:16px;height:130px;position:relative}
+  .chartbox.tall{height:210px}
+  .funnel{background:linear-gradient(var(--panelTop),var(--panel));border:1px solid var(--line);border-radius:4px;padding:22px}
+  .stage{margin:0 auto;text-align:center;padding:18px 16px;border-top:2px solid;}
+  .stage .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase}
+  .stage .m{font-family:var(--disp);font-weight:600;font-size:26px;margin:6px 0 2px}
+  .stage .l{font-size:12.5px;color:var(--muted)}
+  .stage .s{font-family:var(--mono);font-size:10px;color:var(--faint);margin-top:6px}
+  .arrow{text-align:center;color:var(--faint);padding:4px 0;font-size:14px}
+  .tablewrap{border:1px solid var(--line);border-radius:4px;overflow:auto}
+  table{border-collapse:collapse;width:100%;min-width:560px}
+  th{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);
+    text-align:left;padding:10px 14px;border-bottom:1px solid var(--line)}
+  td{padding:11px 14px;font-size:13px;border-bottom:1px solid var(--lineSoft);vertical-align:top}
+  td.k{font-family:var(--disp);font-weight:500}
+  td.v{font-family:var(--mono);color:var(--orangeHi)}
+  td.m{color:var(--muted)} td.s{color:var(--faint);font-family:var(--mono);font-size:11px}
+  tr:last-child td{border-bottom:none}
+  .caption{font-family:var(--mono);font-size:11px;color:var(--faint);margin-top:8px}
+  .prose p{margin-bottom:12px;color:var(--muted)}
+  .prose b{color:var(--text)}
+  .pill{display:inline-block;font-family:var(--mono);font-size:11px;color:var(--gold);border:1px solid var(--line);
+    border-radius:3px;padding:2px 7px;margin-bottom:12px}
+  footer{margin-top:10px;padding-top:18px;border-top:1px solid var(--line);
+    font-family:var(--mono);font-size:11px;color:var(--faint);line-height:1.7}
+  footer .h{color:var(--muted);margin-bottom:6px}
+  .fade{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards}
+  @keyframes rise{to{opacity:1;transform:none}}
+  @media(prefers-reduced-motion:reduce){.fade{animation:none;opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div class="wrap fade">
+  <header>
+    <div class="status"><span class="dot"></span><span>SIGNAL: LIVE · PRIVATE CO. · NO TICKER</span></div>
+    <h1>Canonical <span class="s">//</span> Market Pulse</h1>
+    <p class="lede">You can't read this company off an income statement you don't have. So we track it the way it lives —
+      in the infrastructure layer of the internet — through three proxy signals that move <em>before</em> the money does,
+      then validate them against the one financial filing that exists.</p>
+    <div class="src">BUILT FROM PUBLIC DATA · W3TECHS MAY 2026 · STACK OVERFLOW 2025 · UK COMPANIES HOUSE FY2024 · REVELIO LABS</div>
+    <nav class="toc">
+      <a href="#pillars">01 · Pillars</a>
+      <a href="#funnel">02 · Funnel thesis</a>
+      <a href="#business">03 · Business detail</a>
+      <a href="#ledger">04 · Data ledger</a>
+      <a href="#read">05 · Executive read</a>
+    </nav>
+  </header>
+  <section id="pillars">
+    <div class="sechead"><span class="secnum">01</span><span class="sectitle">The three signals</span></div>
+    <div class="grid3">
+      <div class="panel">
+        <div class="pk"><div><div class="eyebrow">Pillar A · Infrastructure</div><div class="ptitle">Cloud penetration</div></div><div class="badge">A</div></div>
+        <div class="stat"><div><span class="num">14.9</span><span class="unit">%</span><span class="delta up">▴ 1.2 vs Dec '25</span></div>
+          <div class="lab">of web servers with a known OS run Ubuntu</div><div class="sub">The most-deployed named Linux distro on the web</div></div>
+        <div class="chartbox"><canvas id="cDistro"></canvas></div>
+        <div class="note">Where it really wins is the cloud: Ubuntu powers <b>&gt;60%</b> of public-cloud Linux instances,
+          ~<b>67,000</b> new instances <i>daily</i>. Linux VMs — GCP 91.6% · AWS 83.5% · Azure 61.8%.</div>
+      </div>
+      <div class="panel">
+        <div class="pk"><div><div class="eyebrow">Pillar B · Sentiment</div><div class="ptitle">Developer velocity</div></div><div class="badge">B</div></div>
+        <div class="stat"><div><span class="num">27.8</span><span class="unit">%</span><span class="delta up">▴ 0.1 vs '24</span></div>
+          <div class="lab">of developers use Ubuntu — the #1 Linux distro</div><div class="sub">Stack Overflow 2025 · 49,000 devs · 177 countries</div></div>
+        <div class="chartbox"><canvas id="cDev"></canvas></div>
+        <div class="note">Watch-item: in 2025 Android edged past Ubuntu in <i>personal</i> use for the first time
+          (29% vs 28%). Ubuntu still leads every desktop Linux distro — but the lead has stopped widening.</div>
+      </div>
+      <div class="panel">
+        <div class="pk"><div><div class="eyebrow">Pillar C · Business</div><div class="ptitle">Organizational scale</div></div><div class="badge">C</div></div>
+        <div class="stat"><div><span class="num">$292</span><span class="unit">M</span><span class="delta up">▴ 19.3% CAGR</span></div>
+          <div class="lab">FY2024 revenue — up from $205M in 2022</div><div class="sub">83% gross margin · $15.5M operating profit</div></div>
+        <div class="chartbox"><canvas id="cRev"></canvas></div>
+        <div class="note">The blueprint used headcount as a revenue proxy — but Canonical files UK accounts, so we have
+          the <b>real number</b>. Profitable and accelerating, not buying growth.</div>
+      </div>
+    </div>
+  </section>
+  <section id="funnel">
+    <div class="sechead"><span class="secnum">02</span><span class="sectitle">The thesis: an adoption funnel</span></div>
+    <div class="grid2">
+      <div class="funnel">
+        <div class="pill">LOVE AT THE TOP → MONEY AT THE BOTTOM</div>
+        <div id="funnelStages"></div>
+      </div>
+      <div class="panel prose">
+        <div class="eyebrow">How to read it</div>
+        <p>An open-source infrastructure company is a funnel. Each pillar measures one stage, and the data confirms every handoff is intact.</p>
+        <p><b>Top — community.</b> Developers adopt Ubuntu for free; it leads every Linux distro at 27.8% mindshare.</p>
+        <p><b>Middle — cloud.</b> That preference becomes the deployment default: &gt;60% of public-cloud Linux is Ubuntu.</p>
+        <p><b>Bottom — enterprise.</b> Organizations pay Canonical to support what their engineers already run — $292M, 83% margin.</p>
+        <p>The funnel narrows in volume but widens in value. The one crack to watch is at the very top, where developer growth has gone flat.</p>
+      </div>
+    </div>
+  </section>
+  <section id="business">
+    <div class="sechead"><span class="secnum">03</span><span class="sectitle">Headcount: two lenses, shown honestly</span></div>
+    <div class="grid2">
+      <div class="panel">
+        <div class="chartbox tall"><canvas id="cHead"></canvas></div>
+        <div class="note"><span style="color:var(--orange)">●</span> Companies House <i>filed average</i> headcount runs below
+          <span style="color:var(--aubLight)">◐</span> LinkedIn-derived live profile counts. Same trajectory, different
+          counting method — charted side by side rather than silently reconciled.</div>
+      </div>
+      <div class="panel">
+        <div class="chartbox tall"><canvas id="cEnt"></canvas></div>
+        <div class="note">In the <b>paid</b> enterprise Linux tier, Canonical is the clear #2: Ubuntu 33.9% vs RHEL 43.1%,
+          with SUSE third. The realistic growth lane — and the part that actually carries the $292M.</div>
+      </div>
+    </div>
+  </section>
+  <section id="ledger">
+    <div class="sechead"><span class="secnum">04</span><span class="sectitle">Data ledger — every number, sourced</span></div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Dataset</th><th>Metric</th><th>Value</th><th>Why it matters</th><th>Source</th></tr></thead>
+        <tbody id="ledgerBody"></tbody>
+      </table>
+    </div>
+    <div class="caption">Reproduce all values from data/raw/ via scripts/clean_data.py.</div>
+  </section>
+  <section id="read">
+    <div class="sechead"><span class="secnum">05</span><span class="sectitle">So what — the executive read</span></div>
+    <div class="grid3">
+      <div class="panel prose"><div class="eyebrow" style="color:var(--gold)">Strength</div>
+        <p><b>Durable moat, healthy economics.</b> Default-of-the-cloud status plus 83% gross margins is structurally strong. Canonical is #1 in the cloud-native install base and #2 in paid enterprise Linux.</p></div>
+      <div class="panel prose"><div class="eyebrow" style="color:var(--rose)">Risk</div>
+        <p><b>Top of funnel is maturing.</b> Flat developer growth and Android's rise are early signals enterprise demand could decelerate 2–3 years out. The metric to track quarterly.</p></div>
+      <div class="panel prose"><div class="eyebrow" style="color:var(--aubLight)">Open question</div>
+        <p><b>The IPO.</b> Profitable, ~20%/yr growth, founder-controlled. Financially IPO-capable; timing hinges on Mark Shuttleworth's intent, which public data can't resolve.</p></div>
+    </div>
+  </section>
+  <footer>
+    <div class="h">READING NOTES</div>
+    Figures reflect public estimates as of mid-2026 and disagree across sources by design — W3Techs counts only servers
+    that fingerprint a distro (a large "unknown" bucket is excluded); Stack Overflow is self-selected; Companies House reports
+    a fiscal-year average while LinkedIn trackers count a point-in-time snapshot. Treat each number as a signal, not a settled
+    fact. Currency shown as reported (USD-equivalent of GBP filings).
+  </footer>
+</div>
+<script>
+const C={orange:'#E95420',orangeHi:'#F58A5E',aub:'#772953',aubLight:'#B14B86',gold:'#E9A21C',
+  text:'#F6EFEA',muted:'#B89AA2',faint:'#7C6068',line:'#2C1824'};
+Chart.defaults.font.family="'JetBrains Mono',monospace";
+Chart.defaults.font.size=11;
+Chart.defaults.color=C.muted;
+const noGridX={grid:{display:false},border:{display:false}};
+const softGridY={grid:{color:C.line},border:{display:false}};
+const tip={backgroundColor:'#120609',borderColor:'#3A2230',borderWidth:1,titleColor:C.muted,bodyColor:C.text,padding:8,displayColors:false};
+new Chart(cDistro,{type:'bar',data:{labels:['Ubuntu','Debian','CentOS','AlmaLinux','Amazon','Rocky'],
+  datasets:[{data:[14.9,6.2,1.4,0.3,0.2,0.2],backgroundColor:['#E95420','#772953','#772953','#772953','#772953','#772953'],borderRadius:2}]},
+  options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...tip,callbacks:{label:c=>c.parsed.x+'%'}}},
+  scales:{x:{display:false},y:noGridX}}});
+new Chart(cDev,{type:'bar',data:{labels:['Ubuntu','Debian','Arch','RHEL'],
+  datasets:[{data:[27.8,11.4,8.0,2.3],backgroundColor:['#E95420','#772953','#772953','#772953'],borderRadius:2}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...tip,callbacks:{label:c=>c.parsed.y+'%'}}},
+  scales:{x:noGridX,y:softGridY}}});
+new Chart(cRev,{type:'line',data:{labels:['2014','2022','2023','2024'],
+  datasets:[{data:[81,205,251,292],borderColor:C.orange,borderWidth:2,fill:true,tension:.3,
+    pointBackgroundColor:C.orange,pointRadius:3,
+    backgroundColor:(ctx)=>{const g=ctx.chart.ctx.createLinearGradient(0,0,0,130);g.addColorStop(0,'rgba(233,84,32,.45)');g.addColorStop(1,'rgba(233,84,32,0)');return g;}}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...tip,callbacks:{label:c=>'$'+c.parsed.y+'M'}}},
+  scales:{x:noGridX,y:softGridY}}});
+new Chart(cHead,{type:'line',data:{labels:['2014','2022','2023','2024','2025'],
+  datasets:[
+   {label:'Filed avg (Companies House)',data:[337,858,1034,1175,null],borderColor:C.orange,borderWidth:2,pointBackgroundColor:C.orange,pointRadius:3,tension:.2,spanGaps:true},
+   {label:'LinkedIn est. (Revelio)',data:[null,null,1586,1705,1853],borderColor:C.aubLight,borderWidth:2,borderDash:[4,4],pointBackgroundColor:C.aubLight,pointRadius:3,tension:.2,spanGaps:true}
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,font:{size:10}}},tooltip:tip},
+  scales:{x:noGridX,y:softGridY}}});
+new Chart(cEnt,{type:'bar',data:{labels:['RHEL','Ubuntu','SUSE'],
+  datasets:[{data:[43.1,33.9,11.2],backgroundColor:[C.aub,'#E95420',C.aub],borderRadius:2}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},title:{display:true,text:'Paid enterprise Linux share (%)',color:C.faint,font:{size:11}},tooltip:{...tip,callbacks:{label:c=>c.parsed.y+'%'}}},
+  scales:{x:noGridX,y:softGridY}}});
+const stages=[
+  {pct:100,color:'#E95420',tag:'Top · Community',m:'27.8%',l:'of developers run Ubuntu',s:'Stack Overflow 2025'},
+  {pct:74,color:'#B14B86',tag:'Middle · Cloud',m:'>60%',l:'of public-cloud Linux is Ubuntu',s:'Canonical · W3Techs'},
+  {pct:50,color:'#E9A21C',tag:'Bottom · Enterprise',m:'$292M',l:'paid revenue · 83% gross margin',s:'Companies House FY24'}
+];
+const fc=document.getElementById('funnelStages');
+stages.forEach((st,i)=>{
+  fc.insertAdjacentHTML('beforeend',
+   `<div class="stage" style="width:${st.pct}%;border-top-color:${st.color};background:linear-gradient(90deg,${st.color}22,${st.color}33)">
+      <div class="tag" style="color:${st.color}">${st.tag}</div>
+      <div class="m">${st.m}</div><div class="l">${st.l}</div><div class="s">${st.s}</div></div>`);
+  if(i<stages.length-1) fc.insertAdjacentHTML('beforeend','<div class="arrow">▼</div>');
+});
+const ledger=[
+ ['Server OS share','Web servers (known OS) on Ubuntu','14.9%','Market dominance in the install base',"W3Techs '26"],
+ ['Cloud instances','Public-cloud Linux that is Ubuntu','>60%','Default of the cloud era; 67k/day new','Canonical'],
+ ['Linux overall','Websites (known OS) on Linux','61.1%','The pond Ubuntu is biggest fish in',"W3Techs '26"],
+ ['Dev sentiment','Developers using Ubuntu','27.8%','Talent pipeline → future buyers',"Stack Overflow '25"],
+ ['Dev sentiment','Ubuntu rank among Linux distros','#1','Sets the default before procurement',"Stack Overflow '25"],
+ ['Enterprise distro','Ubuntu share of paid enterprise Linux','33.9%','#2 behind RHEL (43.1%)',"Industry '25"],
+ ['Revenue','FY2024 revenue','$292M','Actual business growth (not a proxy)','Companies House'],
+ ['Revenue trend','2022 → 2023 → 2024','$205M→$251M→$292M','19.3% CAGR, accelerating','Companies House'],
+ ['Profitability','Gross margin / op. profit FY24','83% / $15.5M','Scaling profitably','Companies House'],
+ ['Headcount (filed)','Avg employees FY22→FY24','858→1,034→1,175','Operational expansion','Companies House'],
+ ['Headcount (LinkedIn)','Live estimate 2023→2025','1,586→1,705→1,853','Cross-check on hiring','Revelio Labs']
+];
+const lb=document.getElementById('ledgerBody');
+ledger.forEach(r=>lb.insertAdjacentHTML('beforeend',
+  `<tr><td class="k">${r[0]}</td><td>${r[1]}</td><td class="v">${r[2]}</td><td class="m">${r[3]}</td><td class="s">${r[4]}</td></tr>`));
+</script>
+</body>
+</html>
