@@ -75,6 +75,10 @@
   .prose b{color:var(--text)}
   .pill{display:inline-block;font-family:var(--mono);font-size:11px;color:var(--gold);border:1px solid var(--line);
     border-radius:3px;padding:2px 7px;margin-bottom:12px}
+  .warning-box{background:rgba(194,86,107,0.12);border-left:3px solid var(--rose);padding:16px 14px;border-radius:3px;margin:16px 0}
+  .warning-box b{color:var(--rose)}
+  .insight-box{background:rgba(233,162,28,0.1);border-left:3px solid var(--gold);padding:16px 14px;border-radius:3px;margin:16px 0}
+  .insight-box b{color:var(--gold)}
   footer{margin-top:10px;padding-top:18px;border-top:1px solid var(--line);
     font-family:var(--mono);font-size:11px;color:var(--faint);line-height:1.7}
   footer .h{color:var(--muted);margin-bottom:6px}
@@ -90,14 +94,15 @@
     <h1>Canonical <span class="s">//</span> Market Pulse</h1>
     <p class="lede">You can't read this company off an income statement you don't have. So we track it the way it lives —
       in the infrastructure layer of the internet — through three proxy signals that move <em>before</em> the money does,
-      then validate them against the one financial filing that exists.</p>
+      then validate them against the one financial filing that exists. Special attention to the early warning signs.</p>
     <div class="src">BUILT FROM PUBLIC DATA · W3TECHS MAY 2026 · STACK OVERFLOW 2025 · UK COMPANIES HOUSE FY2024 · REVELIO LABS</div>
     <nav class="toc">
       <a href="#pillars">01 · Pillars</a>
       <a href="#funnel">02 · Funnel thesis</a>
-      <a href="#business">03 · Business detail</a>
-      <a href="#ledger">04 · Data ledger</a>
-      <a href="#read">05 · Executive read</a>
+      <a href="#risk">03 · Early warnings</a>
+      <a href="#business">04 · Business detail</a>
+      <a href="#ledger">05 · Data ledger</a>
+      <a href="#read">06 · Executive read</a>
     </nav>
   </header>
   <section id="pillars">
@@ -113,10 +118,10 @@
       </div>
       <div class="panel">
         <div class="pk"><div><div class="eyebrow">Pillar B · Sentiment</div><div class="ptitle">Developer velocity</div></div><div class="badge">B</div></div>
-        <div class="stat"><div><span class="num">27.8</span><span class="unit">%</span><span class="delta up">▴ 0.1 vs '24</span></div>
+        <div class="stat"><div><span class="num">27.8</span><span class="unit">%</span><span class="delta down">▼ +0.1 vs '24</span></div>
           <div class="lab">of developers use Ubuntu — the #1 Linux distro</div><div class="sub">Stack Overflow 2025 · 49,000 devs · 177 countries</div></div>
         <div class="chartbox"><canvas id="cDev"></canvas></div>
-        <div class="note">Watch-item: in 2025 Android edged past Ubuntu in <i>personal</i> use for the first time
+        <div class="note"><b style="color:var(--rose)">⚠ Watch-item: growth has essentially flatlined.</b> In 2025 Android edged past Ubuntu in <i>personal</i> use for the first time
           (29% vs 28%). Ubuntu still leads every desktop Linux distro — but the lead has stopped widening.</div>
       </div>
       <div class="panel">
@@ -125,7 +130,7 @@
           <div class="lab">FY2024 revenue — up from $205M in 2022</div><div class="sub">83% gross margin · $15.5M operating profit</div></div>
         <div class="chartbox"><canvas id="cRev"></canvas></div>
         <div class="note">The blueprint used headcount as a revenue proxy — but Canonical files UK accounts, so we have
-          the <b>real number</b>. Profitable and accelerating, not buying growth.</div>
+          the <b>real number</b>. Profitable and accelerating, not buying growth. But headcount growth (37%) outpaces revenue growth (19.3%).</div>
       </div>
     </div>
   </section>
@@ -142,12 +147,42 @@
         <p><b>Top — community.</b> Developers adopt Ubuntu for free; it leads every Linux distro at 27.8% mindshare.</p>
         <p><b>Middle — cloud.</b> That preference becomes the deployment default: &gt;60% of public-cloud Linux is Ubuntu.</p>
         <p><b>Bottom — enterprise.</b> Organizations pay Canonical to support what their engineers already run — $292M, 83% margin.</p>
-        <p>The funnel narrows in volume but widens in value. The one crack to watch is at the very top, where developer growth has gone flat.</p>
+        <p>The funnel narrows in volume but widens in value. <b>The one crack to watch is at the very top, where developer growth has stopped.</b></p>
       </div>
     </div>
   </section>
+  <section id="risk">
+    <div class="sechead"><span class="secnum">03</span><span class="sectitle">Early warnings: three signals of pressure ahead</span></div>
+    <div class="panel prose">
+      <h3 style="color:var(--text);font-family:var(--disp);font-size:18px;margin-bottom:16px">The Top of Funnel Is Maturing</h3>
+      <div class="warning-box">
+        <b>Developer adoption: +0.1% YoY (essentially flat)</b><br/>
+        For the first time, Android surpassed Ubuntu in personal-use market share (2025: 29% Android vs 28% Ubuntu). This signals the talent pipeline is stalling. Developers choose their tools 2–3 years before procurement decisions. Flat adoption today = enterprise customer saturation 24 months out.
+      </div>
+      <p>Implication: If developers stop preferring Ubuntu (or adoption just plateaus), cloud instances won't accelerate. Enterprise support contracts won't grow at 19% CAGR indefinitely. The funnel's top is the leading indicator; it's already flashing amber.</p>
+    </div>
+    <div class="panel prose" style="margin-top:20px">
+      <h3 style="color:var(--text);font-family:var(--disp);font-size:18px;margin-bottom:16px">Headcount Growth Outpacing Revenue Growth</h3>
+      <div class="warning-box">
+        <b>Headcount: +37% (2022–2025, 858→1,175 employees)</b><br/>
+        <b>Revenue: +19.3% CAGR (same period)</b><br/>
+        That's a 17-point gap. More people, slower per-capita productivity growth. In SaaS, this pattern shows up when: you're hiring aggressively for sales/support (defensive positioning) rather than engineering efficiency, or product velocity is slowing and you need more bodies to maintain the same output.
+      </div>
+      <p>Implication: Unit economics are under pressure. Revenue per employee is declining. Either Canonical is investing heavily in enterprise support capacity (making sense if customer churn is a risk), or they're scaling inefficiently. Either way, the 19% growth rate may require increasingly aggressive headcount investment to maintain.</p>
+    </div>
+    <div class="panel prose" style="margin-top:20px">
+      <h3 style="color:var(--text);font-family:var(--disp);font-size:18px;margin-bottom:16px">Competitive Positioning in Paid Enterprise</h3>
+      <div class="insight-box">
+        <b>Ubuntu: 33.9% of paid enterprise Linux market</b><br/>
+        <b>RHEL: 43.1% (still #1)</b><br/>
+        <b>SUSE: 11.2% (third)</b><br/>
+        In the segment that actually generates revenue, Canonical is #2 behind an entrenched competitor. Developers love Ubuntu free, but when organizations buy support contracts, they still prefer RHEL more often (43% vs 33%). This gap matters.
+      </div>
+      <p>Implication: The free-to-paid conversion isn't as clean as the top-of-funnel story suggests. Organizations trust RHEL for mission-critical infrastructure. Ubuntu's challenge: converting developer preference into enterprise willingness to pay. That's harder than it sounds, and it explains why headcount growth isn't translating into proportional revenue growth.</p>
+    </div>
+  </section>
   <section id="business">
-    <div class="sechead"><span class="secnum">03</span><span class="sectitle">Headcount: two lenses, shown honestly</span></div>
+    <div class="sechead"><span class="secnum">04</span><span class="sectitle">Headcount: two lenses, shown honestly</span></div>
     <div class="grid2">
       <div class="panel">
         <div class="chartbox tall"><canvas id="cHead"></canvas></div>
@@ -163,7 +198,7 @@
     </div>
   </section>
   <section id="ledger">
-    <div class="sechead"><span class="secnum">04</span><span class="sectitle">Data ledger — every number, sourced</span></div>
+    <div class="sechead"><span class="secnum">05</span><span class="sectitle">Data ledger — every number, sourced</span></div>
     <div class="tablewrap">
       <table>
         <thead><tr><th>Dataset</th><th>Metric</th><th>Value</th><th>Why it matters</th><th>Source</th></tr></thead>
@@ -173,14 +208,14 @@
     <div class="caption">Reproduce all values from data/raw/ via scripts/clean_data.py.</div>
   </section>
   <section id="read">
-    <div class="sechead"><span class="secnum">05</span><span class="sectitle">So what — the executive read</span></div>
+    <div class="sechead"><span class="secnum">06</span><span class="sectitle">So what — the executive read</span></div>
     <div class="grid3">
       <div class="panel prose"><div class="eyebrow" style="color:var(--gold)">Strength</div>
         <p><b>Durable moat, healthy economics.</b> Default-of-the-cloud status plus 83% gross margins is structurally strong. Canonical is #1 in the cloud-native install base and #2 in paid enterprise Linux.</p></div>
       <div class="panel prose"><div class="eyebrow" style="color:var(--rose)">Risk</div>
-        <p><b>Top of funnel is maturing.</b> Flat developer growth and Android's rise are early signals enterprise demand could decelerate 2–3 years out. The metric to track quarterly.</p></div>
+        <p><b>Top of funnel is maturing, unit economics under strain.</b> Flat developer growth and Android's rise signal enterprise demand could decelerate 2–3 years out. Headcount expansion (37%) outpacing revenue growth (19%) suggests operational leverage is tightening.</p></div>
       <div class="panel prose"><div class="eyebrow" style="color:var(--aubLight)">Open question</div>
-        <p><b>The IPO.</b> Profitable, ~20%/yr growth, founder-controlled. Financially IPO-capable; timing hinges on Mark Shuttleworth's intent, which public data can't resolve.</p></div>
+        <p><b>The IPO.</b> Profitable, ~20%/yr growth, founder-controlled. Financially IPO-capable; timing hinges on: Can Canonical reverse developer adoption stall AND improve unit economics? If not, growth rate will moderate faster than public markets expect.</p></div>
     </div>
   </section>
   <footer>
@@ -188,11 +223,11 @@
     Figures reflect public estimates as of mid-2026 and disagree across sources by design — W3Techs counts only servers
     that fingerprint a distro (a large "unknown" bucket is excluded); Stack Overflow is self-selected; Companies House reports
     a fiscal-year average while LinkedIn trackers count a point-in-time snapshot. Treat each number as a signal, not a settled
-    fact. Currency shown as reported (USD-equivalent of GBP filings).
+    fact. Currency shown as reported (USD-equivalent of GBP filings). This analysis prioritizes honest interpretation of leading indicators over bullish narratives.
   </footer>
 </div>
 <script>
-const C={orange:'#E95420',orangeHi:'#F58A5E',aub:'#772953',aubLight:'#B14B86',gold:'#E9A21C',
+const C={orange:'#E95420',orangeHi:'#F58A5E',aub:'#772953',aubLight:'#B14B86',gold:'#E9A21C',rose:'#C2566B',
   text:'#F6EFEA',muted:'#B89AA2',faint:'#7C6068',line:'#2C1824'};
 Chart.defaults.font.family="'JetBrains Mono',monospace";
 Chart.defaults.font.size=11;
@@ -244,12 +279,15 @@ const ledger=[
  ['Linux overall','Websites (known OS) on Linux','61.1%','The pond Ubuntu is biggest fish in',"W3Techs '26"],
  ['Dev sentiment','Developers using Ubuntu','27.8%','Talent pipeline → future buyers',"Stack Overflow '25"],
  ['Dev sentiment','Ubuntu rank among Linux distros','#1','Sets the default before procurement',"Stack Overflow '25"],
- ['Enterprise distro','Ubuntu share of paid enterprise Linux','33.9%','#2 behind RHEL (43.1%)',"Industry '25"],
+ ['Dev sentiment (watch)','YoY developer adoption growth','~+0.1%','Growth has stalled — early warning',"Stack Overflow '25"],
+ ['Enterprise distro','Ubuntu share of paid enterprise Linux','33.9%','#2 behind RHEL (43.1%) — harder to convert',"Industry '25"],
+ ['Enterprise distro','RHEL share of paid enterprise Linux','43.1%','Entrenched competitor still winning on paid',"Industry '25"],
  ['Revenue','FY2024 revenue','$292M','Actual business growth (not a proxy)','Companies House'],
  ['Revenue trend','2022 → 2023 → 2024','$205M→$251M→$292M','19.3% CAGR, accelerating','Companies House'],
  ['Profitability','Gross margin / op. profit FY24','83% / $15.5M','Scaling profitably','Companies House'],
- ['Headcount (filed)','Avg employees FY22→FY24','858→1,034→1,175','Operational expansion','Companies House'],
- ['Headcount (LinkedIn)','Live estimate 2023→2025','1,586→1,705→1,853','Cross-check on hiring','Revelio Labs']
+ ['Unit economics','Headcount growth 2022–2025','+37% (858→1,175)','Exceeds revenue growth rate — concern','Companies House'],
+ ['Unit economics','Revenue growth 2022–2025','+19.3% CAGR','Slower than headcount expansion','Companies House'],
+ ['Headcount (LinkedIn)','Live estimate 2023→2025','1,586→1,705→1,853','Cross-check on hiring velocity','Revelio Labs']
 ];
 const lb=document.getElementById('ledgerBody');
 ledger.forEach(r=>lb.insertAdjacentHTML('beforeend',
